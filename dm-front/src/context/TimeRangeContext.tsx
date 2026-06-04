@@ -7,8 +7,16 @@ export interface TimeRangeValue {
   preset: Preset;
   customFrom: string;
   customTo: string;
+  viewDate: string;           // formato "YYYY-MM-DD"
   setPreset: (p: Preset) => void;
   setCustomRange: (from: string, to: string) => void;
+  prevDay: () => void;
+  nextDay: () => void;
+}
+
+function todayStr(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 export const TimeRangeContext = createContext<TimeRangeValue>({
@@ -16,7 +24,9 @@ export const TimeRangeContext = createContext<TimeRangeValue>({
   preset: '1h',
   customFrom: '',
   customTo: '',
+  viewDate: todayStr(),
   setPreset: () => {},
   setCustomRange: () => {},
+  prevDay: () => {},
+  nextDay: () => {},
 });
-

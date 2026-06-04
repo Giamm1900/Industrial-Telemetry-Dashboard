@@ -1,7 +1,8 @@
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import ReactECharts from 'echarts-for-react';
 import PanelWrapper from './PanelWrapper';
 import { useMachine } from '../../hooks/useMachine';
+import { useTimeRange } from '../../hooks/useTimeRange';
 
 const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
 const SLOTS = Array.from({ length: 30 }, (_, i) => String(i * 2).padStart(2, '0'));
@@ -71,27 +72,9 @@ function toLocalDateString(date: Date): string {
 export default function ParquetHeatmapPanel() {
   const { selectedMachine } = useMachine();
 
-  const [viewDate, setViewDate] = useState(toLocalDateString(new Date()));
-
+  const { viewDate, prevDay, nextDay } = useTimeRange();
   const today = toLocalDateString(new Date());
   const isToday = viewDate === today;
-
-  const prevDay = useCallback(() => {
-    setViewDate(d => {
-      const prev = new Date(d + 'T12:00:00');
-      prev.setDate(prev.getDate() - 1);
-      return toLocalDateString(prev);
-    });
-  }, []);
-
-  const nextDay = useCallback(() => {
-    if (isToday) return;
-    setViewDate(d => {
-      const next = new Date(d + 'T12:00:00');
-      next.setDate(next.getDate() + 1);
-      return toLocalDateString(next);
-    });
-  }, [isToday]);
 
   const [drawer, setDrawer] = useState<DrawerState | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
