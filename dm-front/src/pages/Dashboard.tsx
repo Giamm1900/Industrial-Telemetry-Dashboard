@@ -1,10 +1,8 @@
 import Sidebar               from '../components/layout/Sidebar';
 import TelemetryHeader       from '../components/layout/TelemetryHeader';
-import PcStatsPanel           from '../components/panels/PcStatsPanel';
-import IgnitionPanel          from '../components/panels/IgnitionPanel';
-import SwitchableChartPanel   from '../components/panels/SwitchableChartPanel';
 import ParquetHeatmapPanel   from '../components/panels/ParquetHeatmapPanel';
-import EdgeStatusPanel       from '../components/panels/EdgeStatusPanel';
+import SwitchableChartPanel  from '../components/panels/SwitchableChartPanel';
+import KpiGrid               from '../components/panels/KpiBar';
 import { TelemetryProvider } from '../providers/telemetry-provider';
 import { useMachine }        from '../hooks/useMachine';
 import { MachineProvider }   from '../providers/machine-provider';
@@ -14,15 +12,21 @@ function PanelArea() {
   const { selectedMachine } = useMachine();
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 min-w-0 overflow-hidden relative">
+    <div className="flex flex-col flex-1 min-h-0 min-w-0 relative">
       <TelemetryHeader />
 
-      <div className="grid grid-cols-[55fr_45fr] gap-3 flex-1 min-h-0 p-2 overflow-hidden">
-        <ParquetHeatmapPanel />
-        <div className="grid grid-rows-[1fr_1fr_9rem] gap-3 min-h-0">
-          <SwitchableChartPanel />
-          <IgnitionPanel />
-          <EdgeStatusPanel />
+      <div className="flex flex-1 min-h-0 gap-2 p-2">
+        {/* Colonna sinistra — 66% */}
+        <div className="flex-[66] min-w-0 min-h-0">
+          <ParquetHeatmapPanel />
+        </div>
+
+        {/* Colonna destra — 34% */}
+        <div className="flex-[34] flex flex-col gap-2 min-h-0">
+          <div className="flex-1 min-h-0">
+            <SwitchableChartPanel />
+          </div>
+          <KpiGrid />
         </div>
       </div>
 
