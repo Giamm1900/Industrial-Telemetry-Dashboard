@@ -34,7 +34,7 @@ export default function IgnitionPanel({ extraHeader }: { extraHeader?: ReactNode
 
   const option = useMemo(() => ({
     animation: false,
-    grid: { top: 28, right: 12, bottom: 28, left: 38 },
+    grid: { top: 32, right: 12, bottom: 36, left: 52 },
     legend: {
       data: ['Proc. CPU', 'JVM Heap'],
       right: 0, top: 2,
@@ -50,13 +50,13 @@ export default function IgnitionPanel({ extraHeader }: { extraHeader?: ReactNode
     },
     xAxis: {
       type: 'time',
-      axisLabel: { fontSize: 10, color: '#94a3b8', formatter: (v: number) => fmtTs(v, rangeMs) },
+      axisLabel: { fontSize: 12, color: '#64748b', formatter: (v: number) => fmtTs(v, rangeMs) },
       axisLine: { lineStyle: { color: '#e2e8f0' } },
       splitLine: { show: false },
     },
     yAxis: {
       type: 'value', min: 0, max: 100,
-      axisLabel: { fontSize: 10, color: '#94a3b8', formatter: '{value}%' },
+      axisLabel: { fontSize: 12, color: '#64748b', formatter: '{value}%' },
       splitLine: { lineStyle: { type: 'dashed' as const, color: '#f1f5f9' } },
     },
     series: [

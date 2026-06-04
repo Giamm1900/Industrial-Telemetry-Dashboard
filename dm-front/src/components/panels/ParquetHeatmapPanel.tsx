@@ -183,20 +183,20 @@ export default function ParquetHeatmapPanel() {
 
   const option = useMemo(() => ({
     animation: false,
-    grid: { top: 16, right: 12, bottom: 8, left: 44 },
+    grid: { top: 16, right: 12, bottom: 36, left: 52 },
     xAxis: {
       type: 'category',
       data: HOURS,
-      axisLabel: { fontSize: 10, color: '#64748b' },
+      axisLabel: { fontSize: 12, color: '#475569' },
       splitArea: { show: true, areaStyle: { color: ['#f8fafc', '#ffffff'] } },
     },
     yAxis: {
       type: 'category',
       data: SLOTS,
       axisLabel: {
-        fontSize: 9,
-        color: '#64748b',
-        interval: (_index: number, val: string) => parseInt(val, 10) % 20 === 0,
+        fontSize: 11,
+        color: '#475569',
+        interval: (_index: number, val: string) => parseInt(val, 10) % 10 === 0,
         formatter: (val: string) => `:${val}`,
       },
       splitArea: { show: true, areaStyle: { color: ['#f8fafc', '#ffffff'] } },
