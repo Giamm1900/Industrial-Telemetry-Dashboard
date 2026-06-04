@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import ReactECharts from 'echarts-for-react';
 import PanelWrapper from './PanelWrapper';
 import { resolveTimeWindow } from '../../hooks/useTimeWindow';
@@ -12,7 +12,7 @@ function fmtTs(ts: number, rangeMs: number): string {
   return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 }
 
-export default function PcStatsPanel() {
+export default function PcStatsPanel({ headerExtra }: { headerExtra?: ReactNode }) {
   const { selectedMachine } = useMachine();
   const { mode, preset, customFrom, customTo } = useTimeRange();
   const { pcSeries: series, loading, error, refresh } = useTelemetry();
@@ -106,6 +106,7 @@ export default function PcStatsPanel() {
       title="PC Stats — Hardware"
       description="Utilizzo hardware del PC industriale (CPU, RAM, Disco) nel periodo selezionato. Valori sostenuti > 80% indicano rischio di saturazione o rallentamenti operativi."
       status={error ? 'err' : loading ? 'idle' : 'ok'}
+      headerExtra={headerExtra}
     >
       {!selectedMachine ? (
         <div className="h-full flex items-center justify-center text-sm text-slate-400">

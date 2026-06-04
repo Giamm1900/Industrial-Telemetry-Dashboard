@@ -1,7 +1,8 @@
 import Sidebar               from '../components/layout/Sidebar';
 import TelemetryHeader       from '../components/layout/TelemetryHeader';
-import PcStatsPanel          from '../components/panels/PcStatsPanel';
-import IgnitionPanel         from '../components/panels/IgnitionPanel';
+import PcStatsPanel           from '../components/panels/PcStatsPanel';
+import IgnitionPanel          from '../components/panels/IgnitionPanel';
+import SwitchableChartPanel   from '../components/panels/SwitchableChartPanel';
 import ParquetHeatmapPanel   from '../components/panels/ParquetHeatmapPanel';
 import EdgeStatusPanel       from '../components/panels/EdgeStatusPanel';
 import { TelemetryProvider } from '../providers/telemetry-provider';
@@ -19,7 +20,7 @@ function PanelArea() {
       <div className="grid grid-cols-[55fr_45fr] gap-3 flex-1 min-h-0 p-2 overflow-hidden">
         <ParquetHeatmapPanel />
         <div className="grid grid-rows-[1fr_1fr_9rem] gap-3 min-h-0">
-          <PcStatsPanel />
+          <SwitchableChartPanel />
           <IgnitionPanel />
           <EdgeStatusPanel />
         </div>

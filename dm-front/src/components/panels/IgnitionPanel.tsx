@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import ReactECharts from 'echarts-for-react';
 import PanelWrapper from './PanelWrapper';
 import { resolveTimeWindow } from '../../hooks/useTimeWindow';
@@ -22,7 +22,7 @@ function DbStatusBadge({ status }: { status: string | null }) {
   );
 }
 
-export default function IgnitionPanel() {
+export default function IgnitionPanel({ extraHeader }: { extraHeader?: ReactNode }) {
   const { selectedMachine } = useMachine();
   const { mode, preset, customFrom, customTo } = useTimeRange();
   const { ignSeries: series, ignLatestDbStatus, loading, error, refresh } = useTelemetry();
@@ -79,7 +79,7 @@ export default function IgnitionPanel() {
       title="Ignition — Gateway SCADA"
       description="Carico CPU del processo Java (Ignition) e utilizzo heap JVM. Picchi frequenti di JVM > 85% suggeriscono tag overload, query OPC lente o memory leak."
       status={error ? 'err' : loading ? 'idle' : 'ok'}
-      headerExtra={<DbStatusBadge status={ignLatestDbStatus} />}
+      headerExtra={<>{extraHeader}<DbStatusBadge status={ignLatestDbStatus} /></>}
     >
       {!selectedMachine ? (
         <div className="h-full flex items-center justify-center text-sm text-slate-400">
