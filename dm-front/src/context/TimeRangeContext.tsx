@@ -12,6 +12,7 @@ export interface TimeRangeValue {
   setCustomRange: (from: string, to: string) => void;
   prevDay: () => void;
   nextDay: () => void;
+  setViewDate: (date: string) => void;
 }
 
 function todayStr(): string {
@@ -29,4 +30,5 @@ export const TimeRangeContext = createContext<TimeRangeValue>({
   setCustomRange: () => {},
   prevDay: () => {},
   nextDay: () => {},
+  setViewDate: () => {},
 });

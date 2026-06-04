@@ -21,14 +21,14 @@ export function TimeRangeProvider({ children }: { children: ReactNode }) {
   const [customTo, setCustomTo] = useState(
     () => new Date().toISOString().slice(0, 16)
   );
-  const [viewDate, setViewDate] = useState(todayStr);
+  const [viewDate, setViewDate_] = useState(todayStr);
 
   const prevDay = useCallback(() => {
-    setViewDate(d => offsetDate(d, -1));
+    setViewDate_(d => offsetDate(d, -1));
   }, []);
 
   const nextDay = useCallback(() => {
-    setViewDate(d => {
+    setViewDate_(d => {
       const today = todayStr();
       if (d >= today) return d;
       return offsetDate(d, +1);
@@ -46,12 +46,17 @@ export function TimeRangeProvider({ children }: { children: ReactNode }) {
     setMode('custom');
   }
 
+  const setViewDate = useCallback((date: string) => {
+    const today = todayStr();
+    if (date && date <= today) setViewDate_(date);
+  }, [setViewDate_]);
+
   return (
     <TimeRangeContext.Provider value={{
       mode, preset, customFrom, customTo,
       viewDate,
       setPreset, setCustomRange,
-      prevDay, nextDay,
+      prevDay, nextDay, setViewDate,
     }}>
       {children}
     </TimeRangeContext.Provider>

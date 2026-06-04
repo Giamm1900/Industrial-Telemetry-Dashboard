@@ -29,7 +29,7 @@ export default function PanelWrapper({
 
   return (
     // overflow-hidden rimosso dal card esterno: serve al popover "i" per uscire dal bordo
-    <div className={`bg-white border border-slate-200 rounded-md flex flex-col min-h-0 ${className}`}>
+    <div className={`bg-white border border-slate-200 rounded-md flex flex-col min-h-0 h-full ${className}`}>
       <div className="shrink-0 px-3 py-1.5 border-b border-slate-100 flex items-center gap-1.5">
         <span className="text-[11px] font-bold text-slate-900 uppercase tracking-wide leading-none flex-1 truncate">
           {title}

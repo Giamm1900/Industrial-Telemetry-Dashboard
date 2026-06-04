@@ -1,11 +1,11 @@
 import { type ReactNode, useState, useCallback, useRef, useEffect } from "react";
-import { type PcStatPoint, type IgnitionPoint, type EdgeResponse, type DataSenderResponse, TelemetryContext } from "../context/TelemetryContext";
+import { type PcStatPoint, type IgnitionPoint, TelemetryContext } from "../context/TelemetryContext";
 import { resolveTimeWindow } from "../hooks/useTimeWindow";
 import { useMachine } from "../hooks/useMachine";
 import { useTimeRange } from "../hooks/useTimeRange";
 
 const LIVE_INTERVAL_MS = 30_000;
-
+// const API_URL = import.meta.env.VITE_API_URL
 export function TelemetryProvider({ children }: { children: ReactNode }) {
   const { selectedMachine } = useMachine();
   const { mode, preset, customFrom, customTo } = useTimeRange();
@@ -13,8 +13,6 @@ export function TelemetryProvider({ children }: { children: ReactNode }) {
   const [pcSeries,          setPcSeries]          = useState<PcStatPoint[]>([]);
   const [ignSeries,         setIgnSeries]         = useState<IgnitionPoint[]>([]);
   const [ignLatestDbStatus, setIgnLatestDbStatus] = useState<string | null>(null);
-  const [edgeData,          setEdgeData]          = useState<EdgeResponse | null>(null);
-  const [dataSenderData,    setDataSenderData]    = useState<DataSenderResponse | null>(null);
   const [loading,   setLoading]   = useState(false);
   const [error,     setError]     = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -41,8 +39,6 @@ export function TelemetryProvider({ children }: { children: ReactNode }) {
     pcSeries.length > 0 ||
     ignSeries.length > 0 ||
     ignLatestDbStatus !== null ||
-    edgeData !== null ||
-    dataSenderData !== null ||
     loading ||
     error;
 
@@ -50,11 +46,9 @@ export function TelemetryProvider({ children }: { children: ReactNode }) {
     setPcSeries([]);
     setIgnSeries([]);
     setIgnLatestDbStatus(null);
-    setEdgeData(null);
-    setDataSenderData(null);
     setLoading(false);
     setError(false);
-    setLastRequestKey(""); 
+    setLastRequestKey("");
   }
 
   const setLive = useCallback((on: boolean) => {
@@ -84,17 +78,13 @@ export function TelemetryProvider({ children }: { children: ReactNode }) {
     Promise.all([
       fetch(`/api/v1/telemetry/pc-stats?${q}`).then(r => { if (!r.ok) throw new Error(); return r.json(); }),
       fetch(`/api/v1/telemetry/ignition-stats?${q}`).then(r => { if (!r.ok) throw new Error(); return r.json(); }),
-      fetch(`/api/v1/telemetry/edge-status?${q}`).then(r => { if (!r.ok) throw new Error(); return r.json(); }),
-      fetch(`/api/v1/telemetry/data-sender?${q}&page=1&page_size=100`).then(r => { if (!r.ok) throw new Error(); return r.json(); }),
     ])
-      .then(([pc, ign, edge, ds]: [{ series: PcStatPoint[] }, { series: IgnitionPoint[]; latest_db_status: string | null }, EdgeResponse, DataSenderResponse]) => {
+      .then(([pc, ign]: [{ series: PcStatPoint[] }, { series: IgnitionPoint[]; latest_db_status: string | null }]) => {
         if (cancelled) return;
         setPcSeries(pc?.series  ?? []);
         setIgnSeries(ign?.series ?? []);
         setIgnLatestDbStatus(ign?.latest_db_status ?? null);
-        setEdgeData(edge ?? null);
-        setDataSenderData(ds ?? null);
-        setLoading(false); 
+        setLoading(false);
       })
       .catch(() => {
         if (cancelled) return;
@@ -107,7 +97,7 @@ export function TelemetryProvider({ children }: { children: ReactNode }) {
   }, [selectedMachine, mode, preset, customFrom, customTo, refreshKey]);
 
   return (
-    <TelemetryContext.Provider value={{ pcSeries, ignSeries, ignLatestDbStatus, edgeData, dataSenderData, loading, error, isLive, setLive, refresh }}>
+    <TelemetryContext.Provider value={{ pcSeries, ignSeries, ignLatestDbStatus, edgeData: null, dataSenderData: null, loading, error, isLive, setLive, refresh }}>
       {children}
     </TelemetryContext.Provider>
   );

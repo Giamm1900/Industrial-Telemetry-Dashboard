@@ -65,16 +65,10 @@ function Row({
   );
 }
 
-function toLocalDateString(date: Date): string {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-}
-
 export default function ParquetHeatmapPanel() {
   const { selectedMachine } = useMachine();
 
-  const { viewDate, prevDay, nextDay } = useTimeRange();
-  const today = toLocalDateString(new Date());
-  const isToday = viewDate === today;
+  const { viewDate } = useTimeRange();
 
   const [drawer, setDrawer] = useState<DrawerState | null>(null);
   const [copiedField, setCopiedField] = useState<string | null>(null);
@@ -260,30 +254,9 @@ export default function ParquetHeatmapPanel() {
         description="Heatmap dei chunk parquet scritti dal data sender. Ogni cella = intervallo di 2 minuti. Verde = righe > 0, Giallo = 0 righe, Rosso = file mancante, Grigio = nessun dato. Usa le frecce per navigare tra i giorni."
         status={panelStatus}
         headerExtra={
-          <div className="flex items-center gap-1 mr-1">
-            {/* Navigazione giorno */}
-            <button
-              type="button"
-              onClick={prevDay}
-              title="Giorno precedente"
-              className="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors text-sm font-bold"
-            >
-              ‹
-            </button>
-            <span className="text-xs text-slate-800 font-semibold font-mono min-w-16 text-center bg-slate-100 rounded px-2 py-0.5">{displayDate}</span>
-            <button
-              type="button"
-              onClick={nextDay}
-              disabled={isToday}
-              title={isToday ? 'Giorno corrente' : 'Giorno successivo'}
-              className="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors text-sm font-bold disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              ›
-            </button>
-            <span className="text-[10px] text-slate-500 font-medium ml-1">
-              {isLoading ? 'Caricamento…' : fetchError ? 'Errore fetch' : `${chunks} chunk · ${empty} vuoti · ${errors} errori`}
-            </span>
-          </div>
+          <span className="text-[10px] text-slate-500 font-medium mr-1">
+            {isLoading ? 'Caricamento…' : fetchError ? 'Errore fetch' : `${chunks} chunk · ${empty} vuoti · ${errors} errori`}
+          </span>
         }
       >
         <div className={`flex flex-col h-full transition-opacity ${isLoading ? 'opacity-40' : 'opacity-100'}`}>
